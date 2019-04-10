@@ -1,0 +1,38 @@
+#!/bin/bash
+# 
+# download a set of vim color schemes to a target folder (./ is default)
+# option -d sets the download location to $HOME/.vim/colors/
+#
+# (w) github.com/ivanrad
+#
+
+set -e
+
+target_prefix=${1:-./}
+[ $target_prefix = -d ] && target_prefix="$HOME/.vim/colors"
+
+declare -A vim_color_files=(
+    ["zenburn 2.21"]="http://www.vim.org/scripts/download_script.php?src_id=15530"
+    ["vibrantink 1.3"]="http://www.vim.org/scripts/download_script.php?src_id=10117"
+    ["monokai 1.0"]="https://raw.githubusercontent.com/sickill/vim-monokai/master/colors/monokai.vim"
+    ["darkburn 1.2"]="http://www.vim.org/scripts/download_script.php?src_id=10756"
+    ["native 1.0"]="http://www.vim.org/scripts/download_script.php?src_id=6962"
+    ["molokai 1.1"]="http://www.vim.org/scripts/download_script.php?src_id=9750"
+    ["inkpot 20091127"]="http://www.vim.org/scripts/download_script.php?src_id=11833"
+    ["gardener 1.1"]="http://www.vim.org/scripts/download_script.php?src_id=4682"
+    ["256-grayvim 1.0"]="http://www.vim.org/scripts/download_script.php?src_id=12849"
+    ["desert256 1.0.1"]="http://www.vim.org/scripts/download_script.php?src_id=4055"
+    ["devbox-dark-256 1.0"]="http://www.vim.org/scripts/download_script.php?src_id=14442"
+)
+
+echo "${#vim_color_files[@]} files to download to $target_prefix"
+
+mkdir -p $target_prefix
+
+for c in "${!vim_color_files[@]}"; do
+    echo "Downloading $c..."
+    wget --directory-prefix="$target_prefix" --content-disposition \
+         -nv ${vim_color_files[$c]}
+done
+
+exit 0
